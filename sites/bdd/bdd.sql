@@ -171,3 +171,19 @@ CREATE TABLE IF NOT EXISTS `civilite` (
   `civilite` VARCHAR(144) NOT NULL,
   `sexe` VARCHAR(144)NOT NULL
 )
+  ENGINE=InnoDB DEFAULT CHARSET utf8;
+
+--
+-- Structure de la table civilité
+--
+
+DROP TABLE IF EXISTS `adresse`;
+CREATE TABLE IF NOT EXISTS `adresse` (
+  `id_adresse` INT(1) NOT NULL AUTO_INCREMENT PRIMARY KEY UNIQUE,
+  `adresse1` VARCHAR(144) NOT NULL,
+  `adresse2` VARCHAR(144)NOT NULL,
+  `codePostal` VARCHAR(144)NOT NULL,
+  `ville` VARCHAR(144)NOT NULL
+)
+  ENGINE=InnoDB DEFAULT CHARSET utf8;
+
