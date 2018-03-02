@@ -1,189 +1,181 @@
---
--- Base de données pour le site client et le site entreprise
---
--- Pour Mr Vita
--- Avant tout des standard que nous utiliserons  : 11 caractère pour les id (int), et 144 pour les Varchar par defaut, nous ne prendrons pas de Char
---
---
--- Structuere de la Table livre
---
-
--- On detruit la table déjà existante si elle est présente dans le gestionnaire de base de données
-DROP TABLE IF EXISTS `livre`;
--- On crée la table si elle n'existe pas avec son contenu entre parenthèse
-CREATE TABLE IF NOT EXISTS  `livre` (
-  -- attributs principaux de la table
-  `id_livre` INT (11) NOT NULL AUTO_INCREMENT PRIMARY KEY UNIQUE,
-  `ISBN` VARCHAR(17) NOT NULL UNIQUE,
-  `parution` DATE NOT NULL,
-  `titre` VARCHAR(144) NOT NULL,
-  `tome` INT (4) NOT NULL,
-  `page` INT (6) NOT NULL,
-  `dimension` VARCHAR(20),
-  -- attribut clé étrangères
-  `id_collection` INT (11) KEY,
-  `id_type` INT (11) KEY,
-  `id_langue` INT (11) KEY,
-  `id_support` INT (11) KEY,
-  `id_genre` INT (11) KEY,
-  `id_origine` INT (11) KEY
-)
-  -- engine est ce qui vas executer la table et permettre les relations
-  ENGINE=InnoDB DEFAULT CHARSET utf8
-  COMMENT='Table recenscent tout les livres de la base';
-
--- -------------------------------------------------------------------------
-
---
--- Structure de la table editeur lié aux collections
---
-
-DROP TABLE IF EXISTS `editeur`;
-CREATE TABLE IF NOT EXISTS `editeur` (
-  `id_editeur`INT (11) NOT NULL AUTO_INCREMENT PRIMARY KEY UNIQUE,
-  `nom` VARCHAR(144) NOT NULL
-)
-  ENGINE=InnoDB DEFAULT CHARSET utf8
-  COMMENT='Table recenscent tout les editeurs de la base';
-
--- -------------------------------------------------------------------------
-
---
--- Structure de la table collection liée à l'éditeur
---
-
-DROP TABLE IF EXISTS `collection`;
-CREATE TABLE IF NOT EXISTS `collection` (
-  `id_collection`INT (11) NOT NULL AUTO_INCREMENT PRIMARY KEY UNIQUE,
-  `nom` VARCHAR(144) NOT NULL,
-    -- clé étrangère
-  `id_editeur` INT (11) KEY
-)
-  ENGINE=InnoDB DEFAULT CHARSET utf8
-  COMMENT='Table recenscent tout les editeurs de la base';
-
--- -------------------------------------------------------------------------
-
---
--- Structure de la table type
---
-
-DROP TABLE IF EXISTS `type`;
-CREATE TABLE IF NOT EXISTS `type` (
-  `id_type`INT (11) NOT NULL AUTO_INCREMENT PRIMARY KEY UNIQUE,
-  `nom` VARCHAR(144) NOT NULL
-)
-  ENGINE=InnoDB DEFAULT CHARSET utf8
-  COMMENT='Table recenscent tout les les collections de la base reliée aux editeur du fait de leur rapport';
+#------------------------------------------------------------
+#        Script MySQL.
+#------------------------------------------------------------
 
 
--- -------------------------------------------------------------------------
+#------------------------------------------------------------
+# Table: editeur
+#------------------------------------------------------------
 
---
--- Structure de la table langue
---
+CREATE TABLE editeur(
+        id_editeur Int NOT NULL ,
+        nom        Varchar (144) NOT NULL ,
+        PRIMARY KEY (id_editeur )
+)ENGINE=InnoDB;
 
-DROP TABLE IF EXISTS `langue`;
-CREATE TABLE IF NOT EXISTS `langue` (
-  `id_langue`INT (11) NOT NULL AUTO_INCREMENT PRIMARY KEY UNIQUE,
-  `langue1` VARCHAR(144) NOT NULL,
-  `langue2` VARCHAR(144),
-  `langue3` VARCHAR(144),
-  `langue4` VARCHAR(144),
-  `langue5` VARCHAR(144)
-)
-  ENGINE=InnoDB DEFAULT CHARSET utf8
-  COMMENT='Table recenscent toutes les langues dispo pour le livre';
 
--- -------------------------------------------------------------------------
+#------------------------------------------------------------
+# Table: collection
+#------------------------------------------------------------
 
---
--- Structure de la table support
---
+CREATE TABLE collection(
+        id_collection Int NOT NULL ,
+        nom           Varchar (144) NOT NULL ,
+        id_editeur    Int NOT NULL ,
+        PRIMARY KEY (id_collection )
+)ENGINE=InnoDB;
 
-DROP TABLE IF EXISTS `support`;
-CREATE TABLE IF NOT EXISTS `support` (
-  `id_support`INT (11) NOT NULL AUTO_INCREMENT PRIMARY KEY UNIQUE,
-  `nom` VARCHAR(144) NOT NULL
-)
-  ENGINE=InnoDB DEFAULT CHARSET utf8
-  COMMENT='Table recenscent les support pour chaque livre';
 
--- -------------------------------------------------------------------------
+#------------------------------------------------------------
+# Table: livre
+#------------------------------------------------------------
 
---
--- Structure de la table genre
---
+CREATE TABLE livre(
+        id_livre      Int NOT NULL ,
+        ISBN          Varchar (17) NOT NULL ,
+        parution      Date NOT NULL ,
+        titre         Varchar (144) NOT NULL ,
+        tome          Int NOT NULL ,
+        page          Int NOT NULL ,
+        dimension     Varchar (20) NOT NULL ,
+        id_collection Int NOT NULL ,
+        id_langue     Int NOT NULL ,
+        id_support    Int NOT NULL ,
+        id_genre      Int NOT NULL ,
+        id_origine    Int NOT NULL ,
+        id_type       Int NOT NULL ,
+        PRIMARY KEY (id_livre ) ,
+        UNIQUE (ISBN )
+)ENGINE=InnoDB;
 
-DROP TABLE IF EXISTS `genre`;
-CREATE TABLE IF NOT EXISTS `genre` (
-  `id_genre`INT (11) NOT NULL AUTO_INCREMENT PRIMARY KEY UNIQUE,
-  `nom` VARCHAR(144) NOT NULL
-)
-  ENGINE=InnoDB DEFAULT CHARSET utf8
-  COMMENT='Table recenscent tout les genres de livre de la base';
 
--- -------------------------------------------------------------------------
+#------------------------------------------------------------
+# Table: langue
+#------------------------------------------------------------
 
---
--- Structure de la table origine
---
+CREATE TABLE langue(
+        id_langue Int NOT NULL ,
+        langue1   Varchar (144) NOT NULL ,
+        langue2   Varchar (144) NOT NULL ,
+        langue3   Varchar (144) NOT NULL ,
+        langue4   Varchar (144) NOT NULL ,
+        langue5   Varchar (144) NOT NULL ,
+        PRIMARY KEY (id_langue )
+)ENGINE=InnoDB;
 
-DROP TABLE IF EXISTS `origine`;
-CREATE TABLE IF NOT EXISTS `origine` (
-  `id_origine`INT (11) NOT NULL AUTO_INCREMENT PRIMARY KEY UNIQUE,
-  `nom` VARCHAR(144) NOT NULL
-)
-  ENGINE=InnoDB DEFAULT CHARSET utf8
-  COMMENT='Table inscrivant l"origine du livre dans  la base';
 
---
--- la table utilisateur et ses tables exterieures
---
--- Structure de la table utilisateur
---
+#------------------------------------------------------------
+# Table: support
+#------------------------------------------------------------
 
-DROP TABLE IF EXISTS `utilisateur`;
-CREATE TABLE IF NOT EXISTS `utilisateur` (
-  `id_utilisateur` INT (11) NOT NULL AUTO_INCREMENT PRIMARY KEY UNIQUE,
-  `identifiant` VARCHAR(144) NOT NULL  UNIQUE,
-  `mdp` VARCHAR(144)NOT NULL,
-  `tel` INT (10) NOT NULL,
-  `email` VARCHAR(144) NOT NULL,
-  `nom` VARCHAR(144)NOT NULL,
-  `prenom` VARCHAR(144) NOT NULL ,
-  `dateNaissance` DATE NOT NULL ,
-  `admin` INT(1),
-  -- clé étrangère
-  `id_civilite` INT(11) NOT NULL KEY,
-  `id_adresse` INT(11) NOT NULL KEY
-)
-  ENGINE=InnoDB DEFAULT CHARSET utf8
-  COMMENT='Table contenant chacun des utilsisateur enregistrés';
+CREATE TABLE support(
+        id_support Int NOT NULL ,
+        nom        Varchar (144) NOT NULL ,
+        PRIMARY KEY (id_support )
+)ENGINE=InnoDB;
 
---
--- Structure de la table civilité
---
 
-DROP TABLE IF EXISTS `civilite`;
-CREATE TABLE IF NOT EXISTS `civilite` (
-  `id_civilite` INT(1) NOT NULL PRIMARY KEY UNIQUE,
-  `civilite` VARCHAR(144) NOT NULL,
-  `sexe` VARCHAR(144)NOT NULL
-)
-  ENGINE=InnoDB DEFAULT CHARSET utf8;
+#------------------------------------------------------------
+# Table: genre
+#------------------------------------------------------------
 
---
--- Structure de la table civilité
---
+CREATE TABLE genre(
+        id_genre Int NOT NULL ,
+        nom      Varchar (144) NOT NULL ,
+        PRIMARY KEY (id_genre )
+)ENGINE=InnoDB;
 
-DROP TABLE IF EXISTS `adresse`;
-CREATE TABLE IF NOT EXISTS `adresse` (
-  `id_adresse` INT(1) NOT NULL AUTO_INCREMENT PRIMARY KEY UNIQUE,
-  `adresse1` VARCHAR(144) NOT NULL,
-  `adresse2` VARCHAR(144)NOT NULL,
-  `codePostal` VARCHAR(144)NOT NULL,
-  `ville` VARCHAR(144)NOT NULL
-)
-  ENGINE=InnoDB DEFAULT CHARSET utf8;
 
+#------------------------------------------------------------
+# Table: origine
+#------------------------------------------------------------
+
+CREATE TABLE origine(
+        id_origine Int NOT NULL ,
+        nom        Varchar (144) NOT NULL ,
+        PRIMARY KEY (id_origine )
+)ENGINE=InnoDB;
+
+
+#------------------------------------------------------------
+# Table: type
+#------------------------------------------------------------
+
+CREATE TABLE type(
+        id_type Int NOT NULL ,
+        nom     Varchar (144) NOT NULL ,
+        PRIMARY KEY (id_type )
+)ENGINE=InnoDB;
+
+
+#------------------------------------------------------------
+# Table: utilisateur
+#------------------------------------------------------------
+
+CREATE TABLE utilisateur(
+        id_utilisateur Int NOT NULL ,
+        identifiant    Varchar (144) NOT NULL ,
+        mdp            Varchar (144) NOT NULL ,
+        tel            Int NOT NULL ,
+        email          Varchar (144) NOT NULL ,
+        nom            Varchar (144) NOT NULL ,
+        prenom         Varchar (144) NOT NULL ,
+        dateNaissance  Date NOT NULL ,
+        admin          Int ,
+        id_civilite    Int NOT NULL ,
+        id_adresse     Int NOT NULL ,
+        PRIMARY KEY (id_utilisateur )
+)ENGINE=InnoDB;
+
+
+#------------------------------------------------------------
+# Table: emprunt
+#------------------------------------------------------------
+
+CREATE TABLE emprunt(
+        id_emprunt        Int NOT NULL ,
+        dateDebut_emprunt Date NOT NULL ,
+        dateFin_emprunt   Date NOT NULL ,
+        etat_emprunt      Varchar (144) NOT NULL ,
+        id_livre          Int NOT NULL ,
+        id_utilisateur    Int NOT NULL ,
+        PRIMARY KEY (id_emprunt )
+)ENGINE=InnoDB;
+
+
+#------------------------------------------------------------
+# Table: civilite
+#------------------------------------------------------------
+
+CREATE TABLE civilite(
+        id_civilite Int NOT NULL ,
+        civilite    Varchar (144) NOT NULL ,
+        sexe        Varchar (144) NOT NULL ,
+        PRIMARY KEY (id_civilite )
+)ENGINE=InnoDB;
+
+
+#------------------------------------------------------------
+# Table: adresse
+#------------------------------------------------------------
+
+CREATE TABLE adresse(
+        id_adresse Int NOT NULL ,
+        adresse1   Varchar (144) NOT NULL ,
+        adresse2   Varchar (144) NOT NULL ,
+        codePostal Varchar (144) NOT NULL ,
+        ville      Varchar (144) NOT NULL ,
+        PRIMARY KEY (id_adresse )
+)ENGINE=InnoDB;
+
+ALTER TABLE collection ADD CONSTRAINT FK_collection_id_editeur FOREIGN KEY (id_editeur) REFERENCES editeur(id_editeur);
+ALTER TABLE livre ADD CONSTRAINT FK_livre_id_collection FOREIGN KEY (id_collection) REFERENCES collection(id_collection);
+ALTER TABLE livre ADD CONSTRAINT FK_livre_id_langue FOREIGN KEY (id_langue) REFERENCES langue(id_langue);
+ALTER TABLE livre ADD CONSTRAINT FK_livre_id_support FOREIGN KEY (id_support) REFERENCES support(id_support);
+ALTER TABLE livre ADD CONSTRAINT FK_livre_id_genre FOREIGN KEY (id_genre) REFERENCES genre(id_genre);
+ALTER TABLE livre ADD CONSTRAINT FK_livre_id_origine FOREIGN KEY (id_origine) REFERENCES origine(id_origine);
+ALTER TABLE livre ADD CONSTRAINT FK_livre_id_type FOREIGN KEY (id_type) REFERENCES type(id_type);
+ALTER TABLE utilisateur ADD CONSTRAINT FK_utilisateur_id_civilite FOREIGN KEY (id_civilite) REFERENCES civilite(id_civilite);
+ALTER TABLE utilisateur ADD CONSTRAINT FK_utilisateur_id_adresse FOREIGN KEY (id_adresse) REFERENCES adresse(id_adresse);
+ALTER TABLE emprunt ADD CONSTRAINT FK_emprunt_id_livre FOREIGN KEY (id_livre) REFERENCES livre(id_livre);
+ALTER TABLE emprunt ADD CONSTRAINT FK_emprunt_id_utilisateur FOREIGN KEY (id_utilisateur) REFERENCES utilisateur(id_utilisateur);
