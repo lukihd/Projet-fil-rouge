@@ -167,6 +167,7 @@ CREATE TABLE IF NOT EXISTS `utilisateur` (
 
 DROP TABLE IF EXISTS `civilite`;
 CREATE TABLE IF NOT EXISTS `civilite` (
-  `id_civilite` INT(11) NOT NULL PRIMARY KEY UNIQUE,
-  `civilite` VARCHAR(144) NOT NULL 
+  `id_civilite` INT(1) NOT NULL PRIMARY KEY UNIQUE,
+  `civilite` VARCHAR(144) NOT NULL,
+  `sexe` VARCHAR(144)NOT NULL
 )
