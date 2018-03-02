@@ -22,7 +22,6 @@ CREATE TABLE IF NOT EXISTS  `livre` (
   `dimension` VARCHAR(20),
   -- attribut clé étrangères
   `id_editeur` INT (11) KEY,
-  `id_collection` INT (11) KEY,
   `id_type` INT (11) KEY,
   `id_langue` INT (11) KEY,
   `id_support` INT (11) KEY,
@@ -48,3 +47,64 @@ CREATE TABLE IF NOT EXISTS `editeur` (
 )
   ENGINE=InnoDB DEFAULT CHARSET utf8
   COMMENT='Table recenscent tout les editeurs de la base';
+
+-- -------------------------------------------------------------------------
+
+--
+-- Structure de la table collection liée seulement à l'éditeur
+--
+
+DROP TABLE IF EXISTS `collection`;
+CREATE TABLE IF NOT EXISTS `collection` (
+  `id_collection`INT (11) NOT NULL AUTO_INCREMENT PRIMARY KEY UNIQUE,
+  `nom` VARCHAR(144) NOT NULL
+)
+  ENGINE=InnoDB DEFAULT CHARSET utf8
+  COMMENT='Table recenscent tout les editeurs de la base';
+
+-- -------------------------------------------------------------------------
+
+--
+-- Structure de la table type
+--
+
+DROP TABLE IF EXISTS `type`;
+CREATE TABLE IF NOT EXISTS `type` (
+  `id_type`INT (11) NOT NULL AUTO_INCREMENT PRIMARY KEY UNIQUE,
+  `nom` VARCHAR(144) NOT NULL
+)
+  ENGINE=InnoDB DEFAULT CHARSET utf8
+  COMMENT='Table recenscent tout les les collections de la base reliée aux editeur du fait de leur rapport';
+
+
+-- -------------------------------------------------------------------------
+
+--
+-- Structure de la table langue
+--
+
+DROP TABLE IF EXISTS `langue`;
+CREATE TABLE IF NOT EXISTS `langue` (
+  `id_langue`INT (11) NOT NULL AUTO_INCREMENT PRIMARY KEY UNIQUE,
+  `langue1` VARCHAR(144) NOT NULL,
+  `langue2` VARCHAR(144),
+  `langue3` VARCHAR(144),
+  `langue4` VARCHAR(144),
+  `langue5` VARCHAR(144)
+)
+  ENGINE=InnoDB DEFAULT CHARSET utf8
+  COMMENT='Table recenscent toutes les langues dispo pour le livre';
+
+-- -------------------------------------------------------------------------
+
+--
+-- Structure de la table support
+--
+
+DROP TABLE IF EXISTS `support`;
+CREATE TABLE IF NOT EXISTS `support` (
+  `id_support`INT (11) NOT NULL AUTO_INCREMENT PRIMARY KEY UNIQUE,
+  `nom` VARCHAR(144) NOT NULL
+)
+  ENGINE=InnoDB DEFAULT CHARSET utf8
+  COMMENT='Table recenscent les support pour chaque livre';
